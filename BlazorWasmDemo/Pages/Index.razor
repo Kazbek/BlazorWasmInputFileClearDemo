@@ -1,0 +1,43 @@
+﻿@page "/"
+
+<PageTitle>Index</PageTitle>
+
+<h5>After re-open file select window (click on input) its clear input in browser but doesnt notify blazor app.</h5>
+
+<div>
+    <EditForm Model="@Model" OnValidSubmit="HandleSubmit">
+        <InputFile OnChange="@LoadFile" required/>
+        <div>
+            File1 is null: @(Model.File1 == null)
+        </div>
+        <div>
+            File1 name: @Model.File1?.Name
+        </div>
+        <div>
+            File1 size: @Model.File1?.Size
+        </div>
+
+        <button type="submit">submit</button>
+    </EditForm>
+    <div>@SubmitResult</div>
+</div>
+
+@code{
+    private string SubmitResult = string.Empty;
+    private EditModel Model { get; set; } = new();
+
+    private void LoadFile(InputFileChangeEventArgs e)
+    {
+        Model.File1 = e.File;
+    }
+
+    private void HandleSubmit()
+    {
+        SubmitResult = $"Ok at {DateTime.Now} / {Guid.NewGuid()}";
+    }
+
+    private class EditModel
+    {
+        public IBrowserFile? File1 { get; set; }
+    }
+}
